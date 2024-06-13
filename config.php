@@ -1,9 +1,9 @@
 
 <?php
-$host = 'localhost';
-$dbname = 'universidad';
-$username = 'root';
-$password = '';
+$host = '192.168.150.135';
+$dbname = 'UNIVERSIDAD';
+$username = 'efer';
+$password = 'efertello2002';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
