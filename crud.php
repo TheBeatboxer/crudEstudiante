@@ -1,4 +1,3 @@
-
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -17,16 +16,15 @@ switch ($action) {
             var_dump($_POST);
 
             // Validar que todos los campos están presentes
-            if (isset($_POST['codigo'], $_POST['nombre'], $_POST['apellidoPaterno'], $_POST['apellidoMaterno'], $_POST['DNI'], $_POST['facultad'])) {
-                $codigo = $_POST['codigo'];
-                $nombre = $_POST['nombre'];
-                $apellidoPaterno = $_POST['apellidoPaterno'];
-                $apellidoMaterno = $_POST['apellidoMaterno'];
-                $DNI = $_POST['DNI'];
-                $facultad = $_POST['facultad'];
+            if (isset($_POST['titulo'], $_POST['autor'], $_POST['editorial'], $_POST['fechaPublicacion'], $_POST['numeroPaginas'])) {
+                $titulo = $_POST['titulo'];
+                $autor = $_POST['autor'];
+                $editorial = $_POST['editorial'];
+                $fechaPublicacion = $_POST['fechaPublicacion'];
+                $numeroPaginas = $_POST['numeroPaginas'];
 
-                $stmt = $pdo->prepare("INSERT INTO estudiante (codigo, nombre, apellidoPaterno, apellidoMaterno, DNI, facultad) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$codigo, $nombre, $apellidoPaterno, $apellidoMaterno, $DNI, $facultad]);
+                $stmt = $pdo->prepare("INSERT INTO libros (titulo, autor, editorial, fechaPublicacion, numeroPaginas) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$titulo, $autor, $editorial, $fechaPublicacion, $numeroPaginas]);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Datos incompletos']);
@@ -38,7 +36,7 @@ switch ($action) {
 
     case 'read':
         try {
-            $stmt = $pdo->query("SELECT * FROM estudiante");
+            $stmt = $pdo->query("SELECT * FROM libros");
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($result);
         } catch (Exception $e) {
@@ -48,17 +46,16 @@ switch ($action) {
 
     case 'update':
         try {
-            if (isset($_POST['id'], $_POST['codigo'], $_POST['nombre'], $_POST['apellidoPaterno'], $_POST['apellidoMaterno'], $_POST['DNI'], $_POST['facultad'])) {
+            if (isset($_POST['id'], $_POST['titulo'], $_POST['autor'], $_POST['editorial'], $_POST['fechaPublicacion'], $_POST['numeroPaginas'])) {
                 $id = $_POST['id'];
-                $codigo = $_POST['codigo'];
-                $nombre = $_POST['nombre'];
-                $apellidoPaterno = $_POST['apellidoPaterno'];
-                $apellidoMaterno = $_POST['apellidoMaterno'];
-                $DNI = $_POST['DNI'];
-                $facultad = $_POST['facultad'];
+                $titulo = $_POST['titulo'];
+                $autor = $_POST['autor'];
+                $editorial = $_POST['editorial'];
+                $fechaPublicacion = $_POST['fechaPublicacion'];
+                $numeroPaginas = $_POST['numeroPaginas'];
 
-                $stmt = $pdo->prepare("UPDATE estudiante SET codigo = ?, nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, DNI = ?, facultad = ? WHERE id = ?");
-                $stmt->execute([$codigo, $nombre, $apellidoPaterno, $apellidoMaterno, $DNI, $facultad, $id]);
+                $stmt = $pdo->prepare("UPDATE libros SET titulo = ?, autor = ?, editorial = ?, fechaPublicacion = ?, numeroPaginas = ? WHERE id = ?");
+                $stmt->execute([$titulo, $autor, $editorial, $fechaPublicacion, $numeroPaginas, $id]);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Datos incompletos']);
@@ -73,7 +70,7 @@ switch ($action) {
             if (isset($_POST['id'])) {
                 $id = $_POST['id'];
 
-                $stmt = $pdo->prepare("DELETE FROM estudiante WHERE id = ?");
+                $stmt = $pdo->prepare("DELETE FROM libros WHERE id = ?");
                 $stmt->execute([$id]);
                 echo json_encode(['status' => 'success']);
             } else {
@@ -88,4 +85,4 @@ switch ($action) {
         echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
         break;
 }
-?>
+

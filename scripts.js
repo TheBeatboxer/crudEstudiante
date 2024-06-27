@@ -1,7 +1,6 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('studentForm');
-    const tableBody = document.querySelector('#studentsTable tbody');
+    const form = document.getElementById('bookForm');
+    const tableBody = document.querySelector('#booksTable tbody');
     
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(result => {
             if (result.status === 'success') {
-                loadStudents();
+                loadBooks();
                 form.reset();
                 document.getElementById('id').value = '';
             } else {
@@ -35,12 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('edit')) {
             const row = e.target.closest('tr');
             document.getElementById('id').value = row.dataset.id;
-            document.getElementById('codigo').value = row.querySelector('.codigo').innerText;
-            document.getElementById('nombre').value = row.querySelector('.nombre').innerText;
-            document.getElementById('apellidoPaterno').value = row.querySelector('.apellidoPaterno').innerText;
-            document.getElementById('apellidoMaterno').value = row.querySelector('.apellidoMaterno').innerText;
-            document.getElementById('dni').value = row.querySelector('.dni').innerText;
-            document.getElementById('facultad').value = row.querySelector('.facultad').innerText;
+            document.getElementById('titulo').value = row.querySelector('.titulo').innerText;
+            document.getElementById('autor').value = row.querySelector('.autor').innerText;
+            document.getElementById('editorial').value = row.querySelector('.editorial').innerText;
+            document.getElementById('fechaPublicacion').value = row.querySelector('.fechaPublicacion').innerText;
+            document.getElementById('numeroPaginas').value = row.querySelector('.numeroPaginas').innerText;
         } else if (e.target.classList.contains('delete')) {
             const id = e.target.closest('tr').dataset.id;
             fetch('crud.php?action=delete', {
@@ -52,29 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(response => response.json())
               .then(result => {
                   if (result.status === 'success') {
-                      loadStudents();
+                      loadBooks();
                   } else {
-                      alert('Hubo un error al eliminar el estudiante.');
+                      alert('Hubo un error al eliminar el libro.');
                   }
               });
         }
     });
 
-    function loadStudents() {
+    function loadBooks() {
         fetch('crud.php?action=read')
             .then(response => response.json())
             .then(data => {
                 tableBody.innerHTML = '';
-                data.forEach(student => {
+                data.forEach(book => {
                     const row = document.createElement('tr');
-                    row.dataset.id = student.id;
+                    row.dataset.id = book.id;
                     row.innerHTML = `
-                        <td class="codigo">${student.codigo}</td>
-                        <td class="nombre">${student.nombre}</td>
-                        <td class="apellidoPaterno">${student.apellidoPaterno}</td>
-                        <td class="apellidoMaterno">${student.apellidoMaterno}</td>
-                        <td class="dni">${student.DNI}</td>
-                        <td class="facultad">${student.facultad}</td>
+                        <td class="titulo">${book.titulo}</td>
+                        <td class="autor">${book.autor}</td>
+                        <td class="editorial">${book.editorial}</td>
+                        <td class="fechaPublicacion">${book.fechaPublicacion}</td>
+                        <td class="numeroPaginas">${book.numeroPaginas}</td>
                         <td class="actions">
                             <button class="edit">Editar</button>
                             <button class="delete">Eliminar</button>
@@ -85,5 +82,5 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    loadStudents();
+    loadBooks();
 });
